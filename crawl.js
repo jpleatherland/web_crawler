@@ -30,20 +30,27 @@ const getURLsFromHTML = (htmlBody, baseUrl) => {
 }
 
 const crawlPage = async (baseUrl) => {
-  try{
+  try {
     const basePage = await fetch(baseUrl)
+    if (basePage.status >= 400) {
+      console.log(basePage.status, basePage.headerReason ?? '')
+      return {
+        status: basePage.status,
+        reason: basePage.headerReason
+      }
+    }
+    if (!basePage.headers.get('content-type').includes('text/html')) {
+      return {
+        status: 422,
+        reason: 'Not an HTML page'
+      }
+    }
+    const response = await basePage.text()
+    console.log(response)
+    return response
   } catch (error) {
     throw new Error(error)
   }
-  if (basePage.status >= 400){
-    console.log(basePage.status, basePage.headerReason ?? '')
-    return {
-      status: basePage.status,
-      reason: basePage.headerReason
-    }
-  }
-  
-  return basePage.status
 }
 
 export { normalizeUrl, getURLsFromHTML, crawlPage };

@@ -49,17 +49,7 @@ test('getURLsFromHTML both', () => {
   expect(actual).toEqual(expected)
 })
 
-test('crawlPageFetch', async () => {
-  const inputUrl = 'https://wagslane.dev'
-  const actual = await crawlPage(inputUrl)
-  expect(actual).toEqual(200)
-})
-
-test('crawlPage fetch fail', async () => {
-  const inputUrl = 'z'
-  try {
-    const actual = await crawlPage(inputUrl)
-  } catch (error) {
-    return error
-  }
-})
+test('crawlPage', async () => {
+  const actual = await crawlPage('https://wagslane.dev');
+  expect(actual).toContain('I write about code, business, philosophy, or whatever else is interesting to me');
+});
